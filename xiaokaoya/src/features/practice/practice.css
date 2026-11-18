@@ -1,0 +1,123 @@
+.practice-workspace {
+  min-width: 0;
+}
+.practice-workspace .view-tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  padding: 6px;
+  border-radius: 14px;
+  background: #edf2e8;
+  margin-bottom: 24px;
+}
+.practice-workspace .view-tabs button {
+  flex: 1;
+  padding: 12px;
+  border: 0;
+  background: transparent;
+  color: #63765c;
+  border-radius: 10px;
+  min-width: 120px;
+  cursor: pointer;
+}
+.practice-workspace .view-tabs button.active {
+  background: #fffefa;
+  box-shadow: 0 3px 12px #48664612;
+  font-weight: 600;
+}
+.practice-editor,
+.frozen-report {
+  padding: 24px;
+  border: 1px solid #dce6d3;
+  border-radius: 18px;
+  background: #fafbf7;
+  margin-top: 20px;
+}
+.practice-editor .field {
+  margin-bottom: 16px;
+}
+.practice-editor textarea,
+.practice-workspace textarea {
+  min-height: 84px;
+  resize: vertical;
+}
+.practice-counts {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 16px;
+}
+.practice-card {
+  border: 1px solid #e1e8db;
+  border-radius: 16px;
+  padding: 22px;
+  margin: 16px 0;
+}
+.practice-card h3 {
+  margin: 12px 0;
+  font-size: 18px;
+}
+.practice-card small {
+  color: #778570;
+}
+.practice-pages,
+.practice-report-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  align-items: center;
+  margin: 20px 0;
+}
+.practice-empty {
+  padding: 40px 16px;
+  text-align: center;
+}
+.practice-accuracy,
+.practice-answer {
+  border-radius: 14px;
+  background: #edf3e5;
+  padding: 18px;
+}
+.question-text,
+.practice-answer p {
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+.question-preview {
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+.practice-history {
+  padding: 14px 0;
+  border-bottom: 1px solid #dce6d3;
+}
+.practice-fingerprint {
+  overflow-wrap: anywhere;
+  font-family: monospace;
+}
+.practice-summary {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: 14px;
+  padding: 12px 0;
+}
+.practice-summary strong,
+.practice-summary small {
+  display: block;
+  margin-top: 10px;
+}
+.practice-summary strong {
+  font-size: 24px;
+}
+@media (max-width: 700px) {
+  .practice-counts {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .practice-editor,
+  .frozen-report {
+    padding: 16px;
+  }
+}

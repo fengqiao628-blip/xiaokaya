@@ -1,0 +1,49 @@
+{
+  "name": "xiaokaoya",
+  "productName": "小考鸭",
+  "version": "0.8.0",
+  "description": "小考鸭 · 双证学习助手 — 第八阶段错题、模拟考试与冻结报告",
+  "author": "Xiaokaoya",
+  "private": true,
+  "packageManager": "pnpm@11.25.0",
+  "main": "out/main/index.js",
+  "scripts": {
+    "setup:runtime": "install-electron",
+    "dev": "electron-vite dev",
+    "build": "pnpm check:voices && pnpm check:companions && pnpm typecheck && electron-vite build",
+    "check:voices": "node scripts/check-serena-pack.cjs",
+    "check:companions": "node scripts/check-companion-assets.mjs",
+    "typecheck": "tsc --noEmit",
+    "start": "electron-vite preview",
+    "test": "vitest run",
+    "test:e2e": "playwright test",
+    "pack": "pnpm build && electron-builder --win --x64 --dir",
+    "dist": "pnpm build && electron-builder --win nsis --x64 --publish never"
+  },
+  "dependencies": {
+    "dexie": "4.4.7",
+    "dexie-react-hooks": "4.4.0",
+    "lucide-react": "1.72.0",
+    "react": "19.3.1",
+    "react-dom": "19.3.1",
+    "zod": "4.6.7"
+  },
+  "devDependencies": {
+    "@playwright/test": "1.65.1",
+    "@tailwindcss/vite": "4.3.5",
+    "@types/node": "26.6.6",
+    "@types/react": "19.3.0",
+    "@types/react-dom": "19.3.0",
+    "@vitejs/plugin-react": "6.3.0",
+    "electron": "45.3.2",
+    "electron-builder": "26.18.0",
+    "electron-vite": "6.0.0",
+    "fake-indexeddb": "6.2.8",
+    "prettier": "3.10.1",
+    "tailwindcss": "4.3.5",
+    "typescript": "7.0.2",
+    "vite": "8.3.8",
+    "vitest": "5.1.0",
+    "yaml": "2.9.1"
+  }
+}

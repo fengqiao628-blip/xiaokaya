@@ -1,0 +1,18 @@
+xiaokaoya/node_modules/
+xiaokaoya/out/
+xiaokaoya/release/
+xiaokaoya/.runtime/
+xiaokaoya/.cache/
+xiaokaoya/.pnpm-store/
+xiaokaoya/test-results/
+xiaokaoya/playwright-report/
+*.log
+私人备份/
+# Keep local acceptance screenshots and audition exports out of the public source repository.
+xiaokaoya/docs/screenshots/
+xiaokaoya/docs/voice-previews/
+.env
+.env.*
+!.env.example
+*.pem
+*.key

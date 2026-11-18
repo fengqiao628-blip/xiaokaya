@@ -1,0 +1,29 @@
+# These are storage/installation compatibility contracts. Do not change without review.
+appId: cn.xiaokaoya.study
+productName: 小考鸭
+executableName: Xiaokaoya
+asar: true
+electronDist: node_modules/electron/dist
+directories:
+  output: release
+  buildResources: build
+files:
+  - out/**
+  - package.json
+win:
+  target:
+    - target: nsis
+      arch: [x64]
+  icon: build/icon.ico
+  signAndEditExecutable: true
+nsis:
+  guid: d0a54531-87fa-48d9-94d0-ef98f93ca48c
+  oneClick: true
+  perMachine: false
+  deleteAppDataOnUninstall: false
+  createDesktopShortcut: true
+  createStartMenuShortcut: true
+  shortcutName: 小考鸭
+  artifactName: Xiaokaoya-Setup-${version}-x64.exe
+  runAfterFinish: false
+publish: null

@@ -1,0 +1,92 @@
+[
+  {
+    "id": "duck",
+    "name": "小鸭阿鸭",
+    "shortName": "小鸭",
+    "description": "慢慢学，嘎嘎会！",
+    "color": "#fff2bd",
+    "assets": {
+      "study": "companions/duck/study.svg",
+      "rest": "companions/duck/rest.svg",
+      "celebrate": "companions/duck/celebrate.svg",
+      "idle": "companions/duck/idle.svg"
+    },
+    "sound": {
+      "wave": "sine",
+      "baseFrequency": 587
+    },
+    "motionDuration": 4.2
+  },
+  {
+    "id": "cat",
+    "name": "小猫奶糖",
+    "shortName": "小猫",
+    "description": "把知识装进小脑袋。",
+    "color": "#ffeadb",
+    "assets": {
+      "study": "companions/cat/study.svg",
+      "rest": "companions/cat/rest.svg",
+      "celebrate": "companions/cat/celebrate.svg",
+      "idle": "companions/cat/idle.svg"
+    },
+    "sound": {
+      "wave": "sine",
+      "baseFrequency": 659
+    },
+    "motionDuration": 3.8
+  },
+  {
+    "id": "bear",
+    "name": "小熊栗子",
+    "shortName": "小熊",
+    "description": "每一份努力都甜甜的。",
+    "color": "#f0e4d8",
+    "assets": {
+      "study": "companions/bear/study.svg",
+      "rest": "companions/bear/rest.svg",
+      "celebrate": "companions/bear/celebrate.svg",
+      "idle": "companions/bear/idle.svg"
+    },
+    "sound": {
+      "wave": "triangle",
+      "baseFrequency": 392
+    },
+    "motionDuration": 4.8
+  },
+  {
+    "id": "rabbit",
+    "name": "小兔糯糯",
+    "shortName": "小兔",
+    "description": "小小一步，也算进步。",
+    "color": "#fbe6ef",
+    "assets": {
+      "study": "companions/rabbit/study.svg",
+      "rest": "companions/rabbit/rest.svg",
+      "celebrate": "companions/rabbit/celebrate.svg",
+      "idle": "companions/rabbit/idle.svg"
+    },
+    "sound": {
+      "wave": "sine",
+      "baseFrequency": 784
+    },
+    "motionDuration": 3.6
+  },
+  {
+    "id": "dog",
+    "name": "小狗布丁",
+    "shortName": "小狗",
+    "description": "一起把今天过得亮晶晶。",
+    "color": "#e9ecfc",
+    "assets": {
+      "study": "companions/dog/study.svg",
+      "rest": "companions/dog/rest.svg",
+      "celebrate": "companions/dog/celebrate.svg",
+      "idle": "companions/dog/idle.svg"
+    },
+    "sound": {
+      "wave": "triangle",
+      "baseFrequency": 523
+    },
+    "motionDuration": 4.0
+  }
+]

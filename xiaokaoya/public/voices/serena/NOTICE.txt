@@ -1,0 +1,12 @@
+Xiaokaoya Serena voice pack
+Generated with Qwen3-TTS-12Hz-1.7B-CustomVoice, preset speaker Serena.
+Model project: https://github.com/QwenLM/Qwen3-TTS
+Model weights: https://huggingface.co/Qwen/Qwen3-TTS-12Hz-1.7B-CustomVoice
+Model revision: 0c0e3051f131929182e2c023b9537f8b1c68adfe
+The Qwen3-TTS model and project are released under Apache License 2.0; a copy is included.
+This installer distributes generated audio, not the model weights or Python/GPU runtime.
+The voices are AI synthesized; no user voice recording or learning data was used.
+Original Xiaokaoya encouragement text and public-domain classical excerpts retain their listed attribution.
+The settings preview is the exact Serena audition selected by the user.
+Audio generated locally may have leading/trailing silence trimmed and peaks limited before PCM16 encoding.
+The production application plays these files locally and does not call a speech generation service.
