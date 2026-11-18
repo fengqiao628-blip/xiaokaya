@@ -1,3 +1,4 @@
+import { workspacePanel, returnToOverview } from './navigation-helpers'
 import {
   test,
   expect,
@@ -31,10 +32,10 @@ async function seed() {
   await page.getByRole('checkbox', { name: 'CPA · 会计', exact: true }).check()
   await page.getByRole('button', { name: '保存科目选择', exact: true }).click()
 }
-const close = () => page.getByRole('button', { name: '关闭窗口', exact: true }).click()
+const close = () => returnToOverview(page)
 async function workspace() {
   await page.getByRole('button', { name: '练习、错题与模拟', exact: true }).click()
-  return page.getByRole('dialog', { name: '练习、错题与历年报告' })
+  return workspacePanel(page, '练习、错题与历年报告')
 }
 async function rows() {
   return page.evaluate(
@@ -251,7 +252,7 @@ test('authentic accepted 0.7.4 compiled app upgrades to V7 preserving every V6 r
   await launch('same-v6', clone)
   expectV6Preserved(before, await rows())
   expect(await page.evaluate(() => window.desktop.getInfo())).toMatchObject({
-    version: '0.8.0',
+    version: JSON.parse(await readFile('package.json', 'utf8')).version,
     userData: old.userData,
     sessionData: old.sessionData,
     appId: old.appId,

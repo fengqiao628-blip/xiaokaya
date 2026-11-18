@@ -1,3 +1,4 @@
+import { returnToOverview } from './navigation-helpers'
 import {
   test,
   expect,
@@ -80,7 +81,7 @@ test('real desktop: select, validate, save, edit, complete, reopen and stay offl
     'aria-pressed',
     'true',
   )
-  await page.getByRole('button', { name: '关闭窗口', exact: true }).click()
+  await returnToOverview(page)
   const oldQuote = await page.locator('blockquote').innerText()
   await page.getByRole('button', { name: '换一句励志语', exact: true }).click()
   await expect(page.locator('blockquote')).not.toHaveText(oldQuote)
@@ -115,7 +116,7 @@ test('real desktop: select, validate, save, edit, complete, reopen and stay offl
   await page.getByRole('button', { name: '新建学习任务', exact: true }).click()
   await expect(page.getByRole('button', { name: '保存学习任务', exact: true })).toBeVisible()
   await page.screenshot({ path: 'test-results/task-form.png' })
-  await page.getByRole('button', { name: '关闭窗口', exact: true }).click()
+  await returnToOverview(page)
   await page.screenshot({ path: 'test-results/narrow.png', fullPage: true })
 })
 

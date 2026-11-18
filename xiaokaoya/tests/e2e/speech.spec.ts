@@ -1,3 +1,4 @@
+import { workspacePanel, returnToOverview } from './navigation-helpers'
 import {
   test,
   expect,
@@ -55,11 +56,11 @@ async function count() {
   return app.evaluate(() => (globalThis as any).speechProbe.calls.length)
 }
 async function closePanel() {
-  await page.getByRole('button', { name: '关闭窗口', exact: true }).click()
+  await returnToOverview(page)
 }
 async function partners() {
   await page.getByRole('button', { name: '学习伙伴', exact: true }).click()
-  return page.getByRole('dialog', { name: '选一位学习伙伴', exact: true })
+  return workspacePanel(page, '选一位学习伙伴')
 }
 async function enable(mode = 'events') {
   const p = await partners()

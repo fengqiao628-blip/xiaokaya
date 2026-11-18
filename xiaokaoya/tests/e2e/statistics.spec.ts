@@ -1,3 +1,4 @@
+import { workspacePanel, returnToOverview } from './navigation-helpers'
 import {
   test,
   expect,
@@ -38,12 +39,12 @@ async function launch(profile: string, appRoot = resolve('.')) {
   root = info.userData
 }
 async function closePanel() {
-  await page.getByRole('button', { name: '关闭窗口', exact: true }).click()
+  await returnToOverview(page)
   await expect(page.getByRole('dialog')).toHaveCount(0)
 }
 async function stats() {
   await page.getByRole('button', { name: '学习统计与进度', exact: true }).click()
-  return page.getByRole('dialog', { name: '学习统计与进度', exact: true })
+  return workspacePanel(page, '学习统计与进度')
 }
 async function pastWeek(panel: Locator) {
   await panel.getByLabel('统计定位日期', { exact: true }).fill('2024-02-29')
@@ -339,7 +340,7 @@ async function chooseDialog(file: string) {
 }
 async function exportJson(file: string) {
   await page.getByRole('button', { name: '数据与备份', exact: true }).click()
-  const panel = page.getByRole('dialog', { name: '数据与备份', exact: true })
+  const panel = workspacePanel(page, '数据与备份')
   await saveDialog(file)
   await panel.getByRole('button', { name: '导出完整 JSON', exact: true }).click()
   await expect(panel.locator('.backup-result')).toContainText('已导出')
@@ -427,7 +428,7 @@ test('current textbook and video progress stays independent of chapter completio
     .getByRole('article', { name: '资料进度：2027教材', exact: true })
     .getByRole('button', { name: '到年度档案更新', exact: true })
     .click()
-  const dossier = page.getByRole('dialog', { name: '我的年度科目档案', exact: true })
+  const dossier = workspacePanel(page, '我的年度科目档案')
   await expect(dossier.getByLabel('查看备考年份')).toHaveValue('2027')
   await expect(
     dossier.getByRole('button', { name: '查看CPA · 会计 · 2027', exact: true }),
@@ -477,7 +478,7 @@ test('weekly review keeps all-subject goals separate, uses scoped allocations an
   await expect(metric(panel, '筛选科目目标')).toContainText('未设置')
   expect(await snapshot()).toEqual(before)
   await panel.getByRole('button', { name: '调整本周学习安排', exact: true }).click()
-  const planner = page.getByRole('dialog', { name: '学习计划与日历', exact: true })
+  const planner = workspacePanel(page, '学习计划与日历')
   await expect(planner).toContainText('2024-02-26 — 2024-03-03')
   expect(await snapshot()).toEqual(before)
 })
@@ -514,7 +515,7 @@ test('time, progress and weekly CSV exports include exact seconds; cancellation 
   await mkdir(invalid)
   await saveDialog(invalid)
   await panel.getByRole('button', { name: '导出当前统计CSV', exact: true }).click()
-  await expect(panel.locator('.toast.error')).toBeVisible()
+  await expect(page.locator('.toast.error')).toBeVisible()
   await expect(panel.getByLabel('统计定位日期')).toHaveValue('2024-02-29')
   expect(await snapshot()).toEqual(before)
 })
@@ -528,7 +529,7 @@ test('full V5 JSON restore and failed restore recompute every statistic; offline
   expect(backup.schemaVersion).toBe(7)
   await closePanel()
   await page.getByRole('button', { name: '学习记录与计时', exact: true }).click()
-  let learning = page.getByRole('dialog', { name: '学习记录与计时', exact: true })
+  let learning = workspacePanel(page, '学习记录与计时')
   await learning
     .getByRole('article', { name: '学习记录：manual-one:2024-02-29', exact: true })
     .getByRole('button', { name: '作废记录', exact: true })
@@ -542,7 +543,7 @@ test('full V5 JSON restore and failed restore recompute every statistic; offline
   await expect(metric(panel, '其中伙伴陪伴')).toContainText('1分钟')
   await closePanel()
   await page.getByRole('button', { name: '数据与备份', exact: true }).click()
-  const restore = page.getByRole('dialog', { name: '数据与备份', exact: true })
+  const restore = workspacePanel(page, '数据与备份')
   await chooseDialog(file)
   await restore.getByRole('button', { name: '选择 JSON 预检', exact: true }).click()
   await restore.getByRole('checkbox', { name: '确认整体替换当前数据', exact: true }).check()

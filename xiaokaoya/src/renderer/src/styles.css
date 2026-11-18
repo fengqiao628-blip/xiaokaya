@@ -1,7 +1,15 @@
 @import 'tailwindcss';
 
+@font-face {
+  font-family: 'Source Han Sans SC';
+  src: url('/fonts/SourceHanSansSC-VF.otf.woff2') format('woff2');
+  font-weight: 250 900;
+  font-style: normal;
+  font-display: swap;
+}
+
 :root {
-  font-family: 'Segoe UI', 'Microsoft YaHei UI', 'Microsoft YaHei', sans-serif;
+  font-family: 'Source Han Sans SC', sans-serif;
   color: #34423c;
   background: #f8f9f6;
   font-synthesis: none;
@@ -1892,9 +1900,6 @@ h1 > span {
 }
 
 /* Stage 2: local data safety */
-.modal:has(.backup-panel) {
-  width: min(850px, calc(100vw - 32px));
-}
 .backup-status {
   display: flex;
   gap: 12px;
@@ -2139,9 +2144,6 @@ h1 > span {
   max-width: 80vw;
 }
 @media (max-width: 650px) {
-  .modal:has(.backup-panel) {
-    width: calc(100vw - 24px);
-  }
   .backup-actions {
     gap: 8px;
   }

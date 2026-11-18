@@ -1,3 +1,4 @@
+import { workspacePanel, returnToOverview } from './navigation-helpers'
 import {
   test,
   expect,
@@ -29,9 +30,9 @@ async function launch(profile: string, root = resolve('.')) {
 const pet = () => page.locator('.hero-pet > .companion-art')
 async function partners() {
   await page.getByRole('button', { name: '学习伙伴', exact: true }).click()
-  return page.getByRole('dialog', { name: '选一位学习伙伴', exact: true })
+  return workspacePanel(page, '选一位学习伙伴')
 }
-const closePanel = () => page.getByRole('button', { name: '关闭窗口', exact: true }).click()
+const closePanel = () => returnToOverview(page)
 async function seed(title: string) {
   await page.getByRole('button', { name: '选择我的科目', exact: true }).click()
   await page.getByRole('checkbox', { name: 'CPA · 会计', exact: true }).check()

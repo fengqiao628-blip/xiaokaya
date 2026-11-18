@@ -1,3 +1,4 @@
+import { returnToOverview } from './navigation-helpers'
 import {
   test,
   expect,
@@ -22,7 +23,7 @@ async function launch() {
   expect((await page.evaluate(() => window.desktop.getInfo())).environment).toBe('test')
 }
 async function close() {
-  await page.getByRole('button', { name: '关闭窗口', exact: true }).click()
+  await returnToOverview(page)
 }
 test.afterEach(async () => {
   await app?.close().catch(() => {})

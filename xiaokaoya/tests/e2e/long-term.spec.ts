@@ -1,3 +1,4 @@
+import { workspacePanel, returnToOverview } from './navigation-helpers'
 import {
   test,
   expect,
@@ -173,7 +174,7 @@ test('five synthetic annual cycles, 50k confirmed records and segments, 10k task
   ).toContainText('50000分钟')
   at = Date.now()
   await page.getByRole('button', { name: '练习、错题与模拟', exact: true }).click()
-  const p = page.getByRole('dialog', { name: '练习、错题与历年报告' })
+  const p = workspacePanel(page, '练习、错题与历年报告')
   await p.getByRole('tab', { name: '错题与复习' }).click()
   await expect(p.locator('.practice-card')).toHaveCount(20)
   await expect(p.locator('.practice-pages')).toContainText('共10000条')
@@ -199,7 +200,7 @@ test('five synthetic annual cycles, 50k confirmed records and segments, 10k task
   await expect(p.locator('.frozen-report')).toContainText('166小时40分钟', { timeout: 60000 })
   await expect(p.locator('.frozen-report')).toContainText('75.0%')
   times.freezeReportMs = Date.now() - at
-  await page.getByRole('button', { name: '关闭窗口', exact: true }).click()
+  await returnToOverview(page)
   const file = join(root, 'synthetic-5-year-v7.json')
   await app.evaluate(({ dialog }, file) => {
     dialog.showSaveDialog = async () => ({ canceled: false, filePath: file })
@@ -230,7 +231,7 @@ test('five synthetic annual cycles, 50k confirmed records and segments, 10k task
   await launch(profile)
   times.reopenMs = Date.now() - at
   await page.getByRole('button', { name: '练习、错题与模拟', exact: true }).click()
-  const reopened = page.getByRole('dialog', { name: '练习、错题与历年报告' })
+  const reopened = workspacePanel(page, '练习、错题与历年报告')
   await reopened.getByRole('tab', { name: '历年冻结报告' }).click()
   await reopened.getByLabel('报告备考年度').selectOption('2023')
   await reopened.getByRole('button', { name: /第1版/ }).click()

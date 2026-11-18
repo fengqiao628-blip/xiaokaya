@@ -1,3 +1,4 @@
+import { workspacePanel, returnToOverview } from './navigation-helpers'
 import {
   test,
   expect,
@@ -39,10 +40,10 @@ async function seed() {
 }
 async function planner() {
   await page.getByRole('button', { name: '学习日历与周计划', exact: true }).click()
-  return page.getByRole('dialog', { name: '学习计划与日历', exact: true })
+  return workspacePanel(page, '学习计划与日历')
 }
 async function close() {
-  await page.getByRole('button', { name: '关闭窗口', exact: true }).click()
+  await returnToOverview(page)
   await expect(page.getByRole('dialog')).toHaveCount(0)
 }
 async function records(table: string) {
@@ -95,7 +96,7 @@ async function addTask(
   }
   await form.getByRole('button', { name: '保存学习任务', exact: true }).click()
   await expect(form).toHaveCount(0)
-  const result = page.getByRole('dialog', { name: '学习计划与日历', exact: true })
+  const result = workspacePanel(page, '学习计划与日历')
   await expect(result).toBeVisible()
   return result
 }
@@ -251,7 +252,7 @@ test('year/month/week/day calendars include leap days and manually maintained da
   await expect(panel.getByLabel('日历定位日期', { exact: true })).toHaveValue('2030-01-31')
   await close()
   await page.getByRole('button', { name: /^我的科目/ }).click()
-  const dossier = page.getByRole('dialog', { name: '我的年度科目档案', exact: true })
+  const dossier = workspacePanel(page, '我的年度科目档案')
   await dossier.getByLabel('查看备考年份', { exact: true }).selectOption('2027')
   await dossier.getByRole('button', { name: '查看CPA · 会计 · 2027', exact: true }).click()
   await expect(dossier.getByLabel('考试日期', { exact: true })).toHaveValue('2028-02-29')
@@ -276,7 +277,7 @@ test('V4 JSON restore, planning CSV types, offline reopen and narrow calendars p
   panel = await addTask(panel, '离线待安排复习', { review: true, minutes: 30 })
   await close()
   await page.getByRole('button', { name: '数据与备份', exact: true }).click()
-  let backup = page.getByRole('dialog', { name: '数据与备份', exact: true })
+  let backup = workspacePanel(page, '数据与备份')
   const file = join(root, 'complete-v4.json')
   await saveDialog(file)
   await backup.getByRole('button', { name: '导出完整 JSON', exact: true }).click()
@@ -307,7 +308,7 @@ test('V4 JSON restore, planning CSV types, offline reopen and narrow calendars p
   await expect(form).toHaveCount(0)
   await close()
   await page.getByRole('button', { name: '数据与备份', exact: true }).click()
-  backup = page.getByRole('dialog', { name: '数据与备份', exact: true })
+  backup = workspacePanel(page, '数据与备份')
   await app.evaluate(({ dialog }, file) => {
     dialog.showOpenDialog = async () => ({ canceled: false, filePaths: [file] })
   }, file)

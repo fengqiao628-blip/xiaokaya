@@ -1,3 +1,4 @@
+import { workspacePanel, returnToOverview } from './navigation-helpers'
 import {
   test,
   expect,
@@ -74,11 +75,11 @@ async function rows() {
   )
 }
 async function closePanel() {
-  await page.getByRole('button', { name: '关闭窗口', exact: true }).click()
+  await returnToOverview(page)
 }
 async function partners() {
   await page.getByRole('button', { name: '学习伙伴', exact: true }).click()
-  return page.getByRole('dialog', { name: '选一位学习伙伴', exact: true })
+  return workspacePanel(page, '选一位学习伙伴')
 }
 async function seed() {
   await page.getByRole('button', { name: '选择我的科目', exact: true }).click()
@@ -182,7 +183,7 @@ test('unrecorded custom text gives a clear choice, only explicit system-voice se
   await p.getByLabel('声音总开关').check()
   await closePanel()
   await page.getByRole('button', { name: '励志语与诗词', exact: true }).click()
-  const q = page.getByRole('dialog', { name: '励志语与诗词', exact: true })
+  const q = workspacePanel(page, '励志语与诗词')
   await q.getByRole('button', { name: '添加自定义语句', exact: true }).click()
   const custom = '我的专属Serena验收文字，保留原来的学习记录。'
   await q.getByLabel('自定义语句正文').fill(custom)

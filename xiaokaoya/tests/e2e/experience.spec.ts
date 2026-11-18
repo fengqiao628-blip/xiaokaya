@@ -1,3 +1,4 @@
+import { workspacePanel, returnToOverview } from './navigation-helpers'
 import {
   test,
   expect,
@@ -30,15 +31,15 @@ async function launch(profile: string, appRoot = resolve('.')) {
   root = info.userData
 }
 async function closePanel() {
-  await page.getByRole('button', { name: '关闭窗口', exact: true }).click()
+  await returnToOverview(page)
 }
 async function quotes() {
   await page.getByRole('button', { name: '励志语与诗词', exact: true }).click()
-  return page.getByRole('dialog', { name: '励志语与诗词', exact: true })
+  return workspacePanel(page, '励志语与诗词')
 }
 async function partners() {
   await page.getByRole('button', { name: '学习伙伴', exact: true }).click()
-  return page.getByRole('dialog', { name: '选一位学习伙伴', exact: true })
+  return workspacePanel(page, '选一位学习伙伴')
 }
 async function snapshot() {
   return page.evaluate(
@@ -69,7 +70,7 @@ async function snapshot() {
 }
 async function exportJson(file: string) {
   await page.getByRole('button', { name: '数据与备份', exact: true }).click()
-  const panel = page.getByRole('dialog', { name: '数据与备份', exact: true })
+  const panel = workspacePanel(page, '数据与备份')
   await app.evaluate(({ dialog }, file) => {
     dialog.showSaveDialog = async () => ({ canceled: false, filePath: file })
   }, file)
@@ -149,13 +150,16 @@ test('offline library, sources, favorites, custom edits/archive and immutable da
   let custom = panel.getByRole('article').filter({ hasText: '我的专属鼓励' })
   await custom.getByRole('button', { name: /^收藏语句/ }).click()
   await custom.getByRole('button', { name: '设为今日一句', exact: true }).click()
-  await expect(page.locator('.hero-copy blockquote')).toHaveText('我的专属鼓励 · 今天也有一束光')
+  await expect
+    .poll(async () => (await snapshot()).data.dailyQuotes[0])
+    .toMatchObject({ text: '我的专属鼓励 · 今天也有一束光', attribution: { author: '旧署名' } })
   await custom.getByRole('button', { name: '编辑自定义', exact: true }).click()
   await panel.getByLabel('自定义语句正文').fill('修改后的专属语句')
   await panel.getByLabel('自定义语句作者').fill('新署名')
   await panel.getByRole('button', { name: '保存自定义语句', exact: true }).click()
-  await expect(page.locator('.hero-copy blockquote')).toHaveText('我的专属鼓励 · 今天也有一束光')
-  await expect(page.locator('.hero-copy .quote-source')).toContainText('旧署名')
+  await expect
+    .poll(async () => (await snapshot()).data.dailyQuotes[0])
+    .toMatchObject({ text: '我的专属鼓励 · 今天也有一束光', attribution: { author: '旧署名' } })
   await panel.getByRole('tab', { name: '展示历史', exact: true }).click()
   await expect(panel.getByRole('article').first()).toContainText('旧署名')
   await panel.getByRole('tab', { name: '自定义', exact: true }).click()
@@ -181,7 +185,7 @@ test('offline library, sources, favorites, custom edits/archive and immutable da
   await panel.getByRole('button', { name: '保存体验设置', exact: true }).click()
   await closePanel()
   await page.getByRole('button', { name: '数据与备份', exact: true }).click()
-  const restore = page.getByRole('dialog', { name: '数据与备份', exact: true })
+  const restore = workspacePanel(page, '数据与备份')
   await app.evaluate(({ dialog }, file) => {
     dialog.showOpenDialog = async () => ({ canceled: false, filePaths: [file] })
   }, file)

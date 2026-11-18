@@ -1,3 +1,4 @@
+import { workspacePanel, returnToOverview } from './navigation-helpers'
 import {
   test,
   expect,
@@ -47,7 +48,34 @@ async function addTask(title: string) {
 }
 async function dataPanel() {
   await page.getByRole('button', { name: '数据与备份', exact: true }).click()
-  return page.getByRole('dialog', { name: '数据与备份', exact: true })
+  return workspacePanel(page, '数据与备份')
+}
+async function expectSavedTasks(expected: number) {
+  // The dashboard is no longer mounted behind the backup page. Verify the
+  // persisted rows here, and keep the separate home/reopen assertions below.
+  await expect
+    .poll(() =>
+      page.evaluate(
+        () =>
+          new Promise<number>((resolve, reject) => {
+            const request = indexedDB.open('XiaokaoyaStudy')
+            request.onerror = () => reject(request.error)
+            request.onsuccess = () => {
+              const database = request.result
+              const count = database.transaction('tasks', 'readonly').objectStore('tasks').count()
+              count.onsuccess = () => {
+                resolve(count.result)
+                database.close()
+              }
+              count.onerror = () => {
+                reject(count.error)
+                database.close()
+              }
+            }
+          }),
+      ),
+    )
+    .toBe(expected)
 }
 async function seed() {
   await page.getByRole('button', { name: '选择我的科目', exact: true }).click()
@@ -178,7 +206,7 @@ test('complete JSON export, failed preflight, confirmed restore, repeat import, 
   await panel.getByRole('button', { name: '选择 JSON 预检', exact: true }).click()
   await expect(panel.locator('.backup-error')).toContainText('校验失败')
   await expect(panel.getByRole('button', { name: '先备份，再恢复', exact: true })).toHaveCount(0)
-  await page.getByRole('button', { name: '关闭窗口', exact: true }).click()
+  await returnToOverview(page)
   await addTask('备份测试 · 导出后新增')
   await expect(page.getByTestId('task-row')).toHaveCount(2)
   panel = await dataPanel()
@@ -195,7 +223,7 @@ test('complete JSON export, failed preflight, confirmed restore, repeat import, 
   await panel.getByRole('checkbox', { name: '确认整体替换当前数据', exact: true }).check()
   await restore.click()
   await expect(panel.locator('.backup-result')).toContainText('完整恢复成功')
-  await expect(page.getByTestId('task-row')).toHaveCount(1)
+  await expectSavedTasks(1)
   const list = await page.evaluate(() => window.desktop.backup.listSnapshots())
   const before = list.snapshots.find((snapshot) => snapshot.purpose === 'pre-restore')!
   expect(before.counts.tasks).toBe(2)
@@ -210,7 +238,7 @@ test('complete JSON export, failed preflight, confirmed restore, repeat import, 
   await panel.getByRole('checkbox', { name: '确认整体替换当前数据', exact: true }).check()
   await panel.getByRole('button', { name: '先备份，再恢复', exact: true }).click()
   await expect(panel.locator('.backup-result')).toContainText('完整恢复成功')
-  await expect(page.getByTestId('task-row')).toHaveCount(2)
+  await expectSavedTasks(2)
   await page.screenshot({ path: 'test-results/backup-panel.png' })
   await app.close()
   await launch(profile)
@@ -232,7 +260,7 @@ test('native file cancellation is harmless and a failed database restore leaves 
   })
   await panel.getByRole('button', { name: '导出完整 JSON', exact: true }).click()
   await expect(page.locator('.toast')).toContainText('已取消')
-  await page.getByRole('button', { name: '关闭窗口', exact: true }).click()
+  await returnToOverview(page)
   await addTask('失败恢复时需要保留的新增任务')
   panel = await dataPanel()
   await openDialog(json)
@@ -254,12 +282,12 @@ test('native file cancellation is harmless and a failed database restore leaves 
   })
   await panel.getByRole('button', { name: '先备份，再恢复', exact: true }).click()
   await expect(panel.locator('.backup-error')).toContainText('回滚')
-  await expect(page.getByTestId('task-row')).toHaveCount(2)
+  await expectSavedTasks(2)
   expect((await page.evaluate(() => window.desktop.backup.status())).journal?.status).toBe(
     'rolled-back',
   )
   await page.evaluate(() => (window as unknown as { restoreAdd: () => void }).restoreAdd())
   await panel.getByRole('button', { name: '先备份，再恢复', exact: true }).click()
   await expect(panel.locator('.backup-result')).toContainText('完整恢复成功')
-  await expect(page.getByTestId('task-row')).toHaveCount(1)
+  await expectSavedTasks(1)
 })

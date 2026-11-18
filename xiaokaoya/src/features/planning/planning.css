@@ -1,6 +1,3 @@
-.modal:has(.planning-workspace) {
-  width: min(1180px, calc(100vw - 32px));
-}
 .planning-workspace {
   min-width: 0;
 }
@@ -728,10 +725,6 @@
   }
 }
 @media (max-width: 650px) {
-  .modal:has(.planning-workspace) {
-    width: calc(100vw - 20px);
-    padding: 20px 14px;
-  }
   .planner-view-tabs {
     gap: 2px;
     padding: 4px;

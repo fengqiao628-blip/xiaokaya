@@ -1,0 +1,214 @@
+/* Navigation pages use the document scroll; only short actions use dialogs. */
+.main-content {
+  min-width: 0;
+}
+.sidebar {
+  overflow-y: auto;
+}
+.sidebar nav {
+  flex-shrink: 0;
+}
+.nav-label {
+  min-width: 0;
+}
+.workspace-page {
+  container-type: inline-size;
+  min-width: 0;
+  padding-bottom: 28px;
+}
+.workspace-heading {
+  margin: 30px 0 24px;
+}
+.workspace-heading h1 {
+  font-size: clamp(22px, 2.3vw, 30px);
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  color: #344e40;
+  line-height: 1.5;
+  margin-top: 10px;
+}
+h1[tabindex='-1']:focus {
+  outline: none;
+}
+.workspace-surface {
+  min-width: 0;
+  background: var(--cream);
+  border: 1px solid var(--line);
+  border-radius: 20px;
+  padding: clamp(18px, 2.5vw, 32px);
+  box-shadow: 0 4px 20px #344e4004;
+}
+.workspace-surface .modal-description {
+  font-size: 14px;
+  color: #7a897c;
+  line-height: 1.9;
+  margin-bottom: 24px;
+}
+.workspace-surface .field {
+  min-width: 0;
+  font-size: 13px;
+}
+.workspace-surface .field :is(input, select, textarea) {
+  min-width: 0;
+  max-width: 100%;
+  font-size: 14px;
+}
+.workspace-surface .form-columns {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+.workspace-surface :is(.notice, .backup-status, .backup-error, .backup-result) {
+  overflow-wrap: anywhere;
+}
+.workspace-surface .curriculum-layout {
+  grid-template-columns: 190px minmax(0, 1fr);
+  gap: 24px;
+}
+.workspace-surface .cycle-navigation {
+  top: 24px;
+}
+.workspace-surface .curriculum-toolbar .field {
+  flex: 0 1 260px;
+}
+.workspace-surface .curriculum-toolbar > .button {
+  margin-left: auto;
+}
+.workspace-surface .companion-grid {
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 14px;
+}
+.workspace-surface .companion-option {
+  padding: 14px 10px 20px;
+}
+.workspace-surface .companion-option strong {
+  font-size: 14px;
+}
+.workspace-surface .companion-option small {
+  font-size: 11px;
+}
+.workspace-surface .experience-settings {
+  max-width: 920px;
+}
+.workspace-surface .quote-list {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  align-items: start;
+}
+.workspace-surface .backup-panel,
+.workspace-surface .about-content {
+  max-width: 1040px;
+}
+.workspace-surface .backup-actions {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+.workspace-surface .snapshot-list {
+  max-height: none;
+}
+.workspace-surface .about-content dt {
+  font-size: 12px;
+}
+.workspace-surface .about-content dd {
+  font-size: 14px;
+}
+
+/* Break on available content width, accounting for the desktop sidebar. */
+@container (max-width: 960px) {
+  .workspace-surface .curriculum-layout {
+    grid-template-columns: 160px minmax(0, 1fr);
+    gap: 18px;
+  }
+  .workspace-surface .status-columns {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 0;
+  }
+  .workspace-surface .stats-scope,
+  .workspace-surface .learning-filters,
+  .workspace-surface .planner-filters {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .workspace-surface .stats-metrics {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .workspace-surface .stats-two-columns {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .workspace-surface .companion-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+@container (max-width: 680px) {
+  .workspace-surface .curriculum-layout {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .workspace-surface .cycle-navigation {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    position: static;
+    max-height: none;
+    overflow: visible;
+  }
+  .workspace-surface .curriculum-toolbar .field {
+    flex: 1 1 160px;
+  }
+  .workspace-surface .curriculum-toolbar > .button {
+    margin: 0;
+    flex-basis: 100%;
+  }
+  .workspace-surface .form-columns,
+  .workspace-surface .quote-list,
+  .workspace-surface .quote-filters {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .workspace-surface .practice-counts {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .workspace-surface .material-row,
+  .workspace-surface .chapter-heading,
+  .workspace-surface .stats-card > header,
+  .workspace-surface .csv-export {
+    flex-wrap: wrap;
+  }
+  .workspace-surface .year-calendar {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+@media (max-width: 650px) {
+  .sidebar {
+    overflow: visible;
+  }
+  .sidebar nav {
+    justify-content: flex-start;
+    gap: 4px;
+  }
+  .sidebar .nav-item {
+    min-width: 76px;
+    flex-shrink: 0;
+    padding: 7px 8px;
+    white-space: nowrap;
+  }
+  .workspace-heading {
+    margin: 22px 0 18px;
+  }
+  .workspace-surface {
+    padding: 18px 14px;
+    border-radius: 16px;
+  }
+  .workspace-surface .companion-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .workspace-surface .stats-scope,
+  .workspace-surface .learning-filters,
+  .workspace-surface .planner-filters,
+  .workspace-surface .year-calendar,
+  .workspace-surface .backup-actions {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .workspace-surface .cycle-choice {
+    padding: 12px;
+  }
+  .workspace-surface .planner-jump {
+    flex-wrap: wrap;
+  }
+  .workspace-surface .planner-jump label {
+    min-width: 0;
+    flex-wrap: wrap;
+  }
+}

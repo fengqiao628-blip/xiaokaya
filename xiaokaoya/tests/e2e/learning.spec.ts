@@ -1,3 +1,4 @@
+import { workspacePanel, returnToOverview } from './navigation-helpers'
 import {
   test,
   expect,
@@ -66,12 +67,12 @@ async function actual() {
   )
 }
 async function closePanel() {
-  await page.getByRole('button', { name: '关闭窗口', exact: true }).click()
+  await returnToOverview(page)
   await expect(page.getByRole('dialog')).toHaveCount(0)
 }
 async function learningPanel() {
   await page.getByRole('button', { name: '学习记录与计时', exact: true }).click()
-  return page.getByRole('dialog', { name: '学习记录与计时', exact: true })
+  return workspacePanel(page, '学习记录与计时')
 }
 async function manual(panel: Locator, start = '2026-02-28T23:50:00', end = '2026-03-01T00:10:00') {
   await panel.getByRole('button', { name: '手动记录学习', exact: true }).click()
@@ -138,14 +139,14 @@ test('manual records split across midnight; real overlap is refused, drafts surv
       }),
     )
     .toBe(true)
-  await expect(panel.getByRole('alert')).toContainText('重叠')
+  await expect(page.getByRole('alert')).toContainText('重叠')
   await page.screenshot({ path: 'test-results/learning-overlap-desktop.png' })
   await app.evaluate(({ BrowserWindow }) => BrowserWindow.getAllWindows()[0].setSize(430, 900))
   await form.getByRole('button', { name: '保存实际学习记录', exact: true }).click()
-  await expect(panel.getByRole('alert')).toContainText('重叠')
+  await expect(page.getByRole('alert')).toContainText('重叠')
   await expect
     .poll(() =>
-      panel.getByRole('alert').evaluate((el) => {
+      page.getByRole('alert').evaluate((el) => {
         const rect = el.getBoundingClientRect()
         return el.contains(
           document.elementFromPoint(rect.x + rect.width / 2, rect.y + rect.height / 2),
@@ -155,7 +156,7 @@ test('manual records split across midnight; real overlap is refused, drafts surv
     .toBe(true)
   expect(await panel.evaluate((el) => el.scrollWidth <= el.clientWidth + 2)).toBe(true)
   await page.screenshot({ path: 'test-results/learning-overlap-narrow.png' })
-  await panel.getByRole('button', { name: '关闭提示', exact: true }).click()
+  await page.getByRole('button', { name: '关闭提示', exact: true }).click()
   await expect(form.getByLabel('学习记录备注', { exact: true })).toHaveValue('跨日实际学习20分钟')
   expect(await records('studySessions')).toHaveLength(2)
   await form.getByRole('button', { name: '取消录入', exact: true }).click()
@@ -253,7 +254,7 @@ test('record pagination limits rendering while total actual time and full JSON k
   await app.evaluate(({ dialog }, file) => {
     dialog.showSaveDialog = async () => ({ canceled: false, filePath: file })
   }, file)
-  const backup = page.getByRole('dialog', { name: '数据与备份', exact: true })
+  const backup = workspacePanel(page, '数据与备份')
   await backup.getByRole('button', { name: '导出完整 JSON', exact: true }).click()
   await expect(backup.getByText(`已导出：${file}`, { exact: true })).toBeVisible()
   expect((await parseBackup(await readFile(file, 'utf8'))).data.studySessions).toHaveLength(60)
@@ -438,7 +439,7 @@ test('full V5 JSON/CSV restore preserves confirmed records, quarantines pending 
   await expect(panel.getByLabel('本次有效学习时间')).not.toHaveText('00:00:00')
   await closePanel()
   await page.getByRole('button', { name: '数据与备份', exact: true }).click()
-  let backup = page.getByRole('dialog', { name: '数据与备份', exact: true })
+  let backup = workspacePanel(page, '数据与备份')
   const file = join(root, 'v5.json')
   await app.evaluate(({ dialog }, file) => {
     dialog.showSaveDialog = async () => ({ canceled: false, filePath: file })
@@ -465,7 +466,7 @@ test('full V5 JSON/CSV restore preserves confirmed records, quarantines pending 
   expect(await actual()).toBeGreaterThan(1200)
   await closePanel()
   await page.getByRole('button', { name: '数据与备份', exact: true }).click()
-  backup = page.getByRole('dialog', { name: '数据与备份', exact: true })
+  backup = workspacePanel(page, '数据与备份')
   await app.evaluate(({ dialog }, file) => {
     dialog.showOpenDialog = async () => ({ canceled: false, filePaths: [file] })
   }, file)

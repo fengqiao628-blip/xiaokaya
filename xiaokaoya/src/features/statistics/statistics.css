@@ -1,6 +1,3 @@
-.modal:has(.statistics-workspace) {
-  width: min(1200px, calc(100vw - 44px));
-}
 .statistics-workspace {
   color: #52674f;
 }
@@ -551,10 +548,6 @@
   }
 }
 @media (max-width: 650px) {
-  .modal:has(.statistics-workspace) {
-    width: calc(100vw - 24px);
-    padding: 20px 16px;
-  }
   .stats-tabs button,
   .stats-periods button {
     padding: 12px 5px;

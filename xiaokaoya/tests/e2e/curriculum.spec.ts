@@ -1,3 +1,4 @@
+import { workspacePanel, returnToOverview } from './navigation-helpers'
 import {
   test,
   expect,
@@ -29,12 +30,12 @@ async function launch(profile: string) {
   root = (await page.evaluate(() => window.desktop.getInfo())).userData
 }
 async function closePanel() {
-  await page.getByRole('button', { name: '关闭窗口', exact: true }).click()
+  await returnToOverview(page)
   await expect(page.getByRole('dialog')).toHaveCount(0)
 }
 async function openWorkspace() {
   await page.getByRole('button', { name: /^我的科目/ }).click()
-  return page.getByRole('dialog', { name: '我的年度科目档案', exact: true })
+  return workspacePanel(page, '我的年度科目档案')
 }
 async function seed(comprehensive = false) {
   await page.getByRole('button', { name: '选择我的科目', exact: true }).click()
@@ -148,7 +149,7 @@ test('yearly dossiers, independent statuses, separate resource progress, archive
   const file = join(root, 'complete-v3.json'),
     csv = join(root, 'chapters-v3.csv')
   await page.getByRole('button', { name: '数据与备份', exact: true }).click()
-  let backup = page.getByRole('dialog', { name: '数据与备份', exact: true })
+  let backup = workspacePanel(page, '数据与备份')
   await saveDialog(file)
   await backup.getByRole('button', { name: '导出完整 JSON', exact: true }).click()
   await expect(backup.locator('.backup-result')).toContainText('已导出')
@@ -173,7 +174,7 @@ test('yearly dossiers, independent statuses, separate resource progress, archive
   await expect(workspace.locator('.chapter-card')).toContainText('★★★★★')
   await closePanel()
   await page.getByRole('button', { name: '数据与备份', exact: true }).click()
-  backup = page.getByRole('dialog', { name: '数据与备份', exact: true })
+  backup = workspacePanel(page, '数据与备份')
   await app.evaluate(({ dialog }, file) => {
     dialog.showOpenDialog = async () => ({ canceled: false, filePaths: [file] })
   }, file)
